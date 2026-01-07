@@ -1,0 +1,26 @@
+import com.here.olp.util.quad.*;
+import com.here.olp.util.quad.factory.*;
+
+public class MapQuadExample {
+    public static void main(String[] args) {
+        // Example coordinates
+        double latitudeBER = 52.5200;   // Berlin
+        double longitudeBER = 13.4050;
+        double longitude = 11.65792616;
+        double latitude = 48.26233512; // Garching
+        int zoomLevel = 14;
+
+        HereQuad myQuad = new HereQuad(latitude, longitude, zoomLevel);
+        System.out.println("HereQuad: " + myQuad);
+
+        NdsQuad myNDSQuad = new NdsQuad(latitude, longitude, zoomLevel-1);
+        System.out.println("NDSquad.getLongKey(): " + myNDSQuad.getLongKey());
+
+        NdsQuad ndsQuad2 = NdsQuadFactory.INSTANCE.boundingBoxToMapQuad(myQuad.getBoundingBox(), zoomLevel-1).get(0);
+        System.out.println("HereQuad2 to NDS Packed Tile Id: " 
+            + ndsQuad2.getLongKey() + " / " + ndsQuad2.getQuadKey()+ " level " + ndsQuad2.getZoomLevel());
+
+        NdsQuad myNDSQuad2 = NdsQuadFactory.INSTANCE.boundingBoxToMapQuad(myQuad.getBoundingBox(), zoomLevel-1).get(0);
+        System.out.println("NDS Packed Tile ID: " + myNDSQuad2.getLongKey());
+    }
+}
