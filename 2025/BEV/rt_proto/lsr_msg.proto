@@ -1,0 +1,70 @@
+syntax = "proto2";
+import "common.proto";
+package autoplt.canfd;
+
+//Type of the object, which is the light source (目标类型)
+enum BstdsLsrType {
+  LSR_TYP_UNKNOWN = 0;
+  LSR_STREELIGHT = 1;
+  LSR_CAR = 2;
+  LSR_TRUCKNBUS = 3;
+  LSR_TWOWHEELER = 4; 
+  LSR_BUS = 5; 
+};
+
+//Direction of the object, which is the light source (目标运动方向)
+enum BstdsLsrDir {
+  LSR_DIR_UNKNOWN = 0;
+  LSR_PRECEDING = 1;
+  LSR_ONCOMING = 2;
+};
+
+//Lamp type of vehicle(including left turn lamp, right turn lamp, double flashing lamp) 车辆灯的类型(包括左转灯，右转灯，双闪灯)
+enum BstdsLsrLightType {
+  LSR_LIT_UNKNOWN = 0;
+  LSR_LIT_LEFTTURN = 1;
+  LSR_LIT_RIGHTURN = 2;
+  LSR_LIT_DOUBLEFLASH = 3;
+};
+
+message BstdsLsrHeader {
+  optional int32 protocol_version = 1;
+  //Exposure time of midpoint of the image, unit: second (图像曝光中间点的时间戳)
+  optional double time_stamp = 2;
+  //Image frame counter with E2E protection. The frame counter is verified to ASIL B
+  optional int32 img_frame_ctr = 3;
+  //Number of objects detected (检测出的目标数)
+  optional int32 object_number = 4;
+  //Lighting condition of the area (行驶区域的光照条件)
+  optional BstdsBoolean lit_area = 5;
+  optional int64 check_sum = 6;
+  optional double isp_time_stamp = 7;
+  
+};
+
+message BstdsLsrObject {
+  optional BstdsLsrType type = 1;
+  optional BstdsLsrDir dir = 2;
+  //Confidence of the object detection according to the light source (识别置信度)
+  optional float confidence = 3;
+  //Longitudinal distance of the object,which is the light source (目标纵向距离)
+  optional float lgt_dist = 4;  
+  optional BstdsLsrLightType light_type = 5;
+
+  optional float vert_ag = 6;
+
+  optional float hozl_agle = 7;
+
+  optional float hozl_agri = 8;
+  optional float hozl_agspdle = 9;
+  optional float hozl_agspdri = 10;
+
+  //If the detection is valid/populated this flag will be true. (表明当前探测是否有效)
+  optional BstdsBoolean valid = 11;
+};
+
+message BstdsLsrInfo {
+  optional BstdsLsrHeader header = 1;
+  repeated BstdsLsrObject light = 2;
+};
+    

@@ -1,0 +1,78 @@
+syntax = "proto2";
+import "common.proto";
+package autoplt.canfd;
+
+message BstdsVehicleInfo {
+    optional BstdsBoolean vil_info_valid = 1;
+    optional int32 protocol_version = 2;
+    //Exposure time of midpoint of the image, unit: second (图像曝光中间点的时间戳)
+    optional double time_stamp = 3;
+    optional BstdsBoolean vehicle_speed_valid = 4;
+    optional float vehicle_speed = 5; 
+    optional BstdsBoolean brake_on_valid = 6;
+    optional BstdsBoolean brake_on = 7;
+    optional BstdsBoolean left_light_on_valid = 8;
+    optional BstdsBoolean left_light_on = 9;
+    optional BstdsBoolean right_light_on_valid = 10;
+    optional BstdsBoolean right_light_on = 11;
+    optional BstdsBoolean wind_wiper_on_valid = 12;
+    optional BstdsBoolean wind_wiper_on = 13;
+    optional BstdsBoolean steering_angle_valid = 14;
+    //degree, minus when turn left
+    optional float steering_angle = 15; 
+    //Wheel encoder rotation speed
+    optional BstdsBoolean fl_wheel_spd_valid = 16;
+    //unit:rpm positive is forward
+    optional float fl_wheel_spd = 17;    
+    optional BstdsBoolean fr_wheel_spd_valid = 18;
+    //unit:rpm positive is forward
+    optional float fr_wheel_spd = 19;
+    optional BstdsBoolean rl_wheel_spd_valid = 20;
+    //unit:rpm positive is forward
+    optional float rl_wheel_spd = 21;
+    optional BstdsBoolean rr_wheel_spd_valid = 22;
+    //unit:rpm positive is forward
+    optional float rr_wheel_spd = 23;
+    //IMU
+    optional BstdsBoolean yaw_rate_valid = 24;
+    //[deg/s] IMU yaw_rate in ego coordinate
+    optional float yawrate = 25;
+    optional BstdsBoolean lon_accv_alid = 26;
+    optional float lon_acc = 27;
+    optional BstdsBoolean lat_acc_valid = 28;
+    optional float lat_acc = 29;
+    optional BstdsBoolean IMU_axValid = 30; /**< determine if the long acc of vehicle is update */
+    optional float IMU_ax = 31; /**< IMU long acc, unit:m/s2 */
+    optional BstdsBoolean IMU_ayValid = 32; /**< determine if the lat acc of vehicle is update */
+    optional float IMU_ay = 33; /**< IMU lat acc, unit:m/s2 */
+    optional BstdsBoolean IMU_azValid = 34; /**< determine if the vert acc of vehicle is update */
+    optional float IMU_az = 35; /**< IMU vert acc, unit:m/s2 */
+    optional BstdsBoolean IMU_wxValid = 36; /**< determine if the roll rate of vehicle is update */
+    optional float IMU_wx = 37; /**< IMU roll rate, unit:rad/s */
+    optional BstdsBoolean IMU_wyValid = 38; /**< determine if the pitch rate of vehicle is update */
+    optional float IMU_wy = 39; /**< IMU pitch rate, unit:rad/s */   
+    optional BstdsBoolean IMU_wzValid = 40; /**< determine if the yaw rate of vehicle is update */
+    optional float IMU_wz = 41; /**< IMU yaw rate, unit:rad/s */
+    //GPS
+    optional BstdsBoolean gps_lon_valid = 42;
+    optional double gps_lon = 43;
+    optional BstdsBoolean gps_lat_valid = 44;
+    optional double gps_lat = 45;
+    optional BstdsBoolean gps_alt_valid = 46;
+    optional double gps_alt = 47;
+    optional BstdsBoolean hight_beam_Valid = 48;
+    optional double hight_beam = 49;
+    optional BstdsBoolean gear_Valid = 50;
+    optional float gear = 51;
+    optional BstdsBoolean pulse_num_Valid = 52;
+    optional float pulse_num = 53;
+
+    optional bool oc_valid = 54;
+    optional int32 oc_state = 55;
+    optional float oc_pitch = 56;
+    optional float oc_roll = 57;
+    optional float oc_yaw = 58;
+    optional bool b_low_bean = 59;
+  };
+
+  

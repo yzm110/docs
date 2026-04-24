@@ -1,0 +1,78 @@
+syntax = "proto2";
+package autoplt.canfd;
+
+message BstdsMapHeader {
+    optional bool   is_valid        = 1;
+    optional bool   is_empty        = 2;
+    optional bool   overpass        = 3;
+    optional bool   weak_signal     = 4;
+    optional uint64 status          = 5;
+};
+
+message BstdsMapOffset {
+    required double hor_offset      = 1;
+    required double ver_offset      = 2;
+    required double rot_offset      = 3;
+};
+
+enum BstdsMapCoordType {
+    MAP_COORD_LLA                   = 0;
+    MAP_COORD_EGO                   = 1;
+    MAP_COORD_ECEF                  = 2;
+};
+
+message BstdsMapCoordLLA {
+    required double latitude        = 1;
+    required double longitude       = 2;
+    required double altitude        = 3;
+};
+
+message BstdsMapCoordEGO {
+    required double ego_x           = 1;
+    required double ego_y           = 2;
+    required double ego_z           = 3;
+};
+
+message BstdsMapCoordECEF {
+    required double ecef_x          = 1;
+    required double ecef_y          = 2;
+    required double ecef_z          = 3;
+};
+
+message BstdsMapPoint {
+    required BstdsMapCoordType  coord_type  = 1;
+    optional BstdsMapCoordLLA   lla         = 2;
+    optional BstdsMapCoordEGO   ego         = 3;
+    optional BstdsMapCoordECEF  ecef        = 4;
+};
+
+message BstdsMapPath {
+    optional uint32             valid_size  = 1;
+    repeated BstdsMapPoint      points      = 2;
+};
+
+message BstdsMapPathInfo {
+    optional uint32             paths_num   = 1;
+    repeated BstdsMapPath       paths       = 2;
+};
+
+message BstdsLoadInfo {
+    optional uint32             l1_cache    = 1;
+    optional uint32             l2_cache    = 2;
+    optional uint32             l3_cache    = 3;
+    optional uint32             to_load     = 4;
+    optional string             map_id      = 5;
+    optional string             atlas       = 6;
+};
+
+message BstdsEgoInfo {
+    optional BstdsMapCoordLLA   lla         = 1;
+    optional BstdsMapOffset     offset      = 2;
+};
+
+message BstdsMapInfo {
+    optional BstdsMapHeader     header      = 1;
+    optional BstdsEgoInfo       ego_info    = 2;
+    optional BstdsLoadInfo      load_info   = 3;
+    optional BstdsMapPathInfo   path_info   = 4;
+}

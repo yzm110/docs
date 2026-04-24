@@ -1,0 +1,281 @@
+syntax = "proto2";
+import "common.proto";
+package autoplt.canfd;
+
+/**
+ * The traffic sign type. （主交通标志的类型）
+ */
+enum BstdsMainType {
+    TFS_UNKNOWN = 0;
+    TFS_SPEEDLIMIT5 = 1;
+    TFS_SPEEDLIMIT10 = 2;
+    TFS_SPEEDLIMIT15 = 3;
+    TFS_SPEEDLIMIT20 = 4;
+    TFS_SPEEDLIMIT25 = 5;
+    TFS_SPEEDLIMIT30 = 6;
+    TFS_SPEEDLIMIT35 = 7;
+    TFS_SPEEDLIMIT40 = 8;
+    TFS_SPEEDLIMIT45 = 9;
+    TFS_SPEEDLIMIT50 = 10;
+    TFS_SPEEDLIMIT55 = 11;
+    TFS_SPEEDLIMIT60 = 12;
+    TFS_SPEEDLIMIT65 = 13;
+    TFS_SPEEDLIMIT70 = 14;
+    TFS_SPEEDLIMIT75 = 15;
+    TFS_SPEEDLIMIT80 = 16;
+    TFS_SPEEDLIMIT85 = 17;
+    TFS_SPEEDLIMIT90 = 18;
+    TFS_SPEEDLIMIT95 = 19;
+    TFS_SPEEDLIMIT100 = 20;
+    TFS_SPEEDLIMIT105 = 21;
+    TFS_SPEEDLIMIT110 = 22;
+    TFS_SPEEDLIMIT115 = 23;
+    TFS_SPEEDLIMIT120 = 24;
+    TFS_SPEEDLIMIT125 = 25;
+    TFS_SPEEDLIMIT130 = 26;
+    TFS_SPEEDLIMIT135 = 27;
+    TFS_SPEEDLIMIT140 = 28;
+    TFS_SPEEDLIMIT145 = 29;
+    TFS_SPEEDLIMIT150 = 30;
+    TFS_SPEEDLIMIT155 = 31;
+    TFS_SPEEDLIMIT160 = 32;
+    TFS_ENDOFSPEEDLIMIT5 = 33;
+    TFS_ENDOFSPEEDLIMIT10 = 34;
+    TFS_ENDOFSPEEDLIMIT15 = 35;
+    TFS_ENDOFSPEEDLIMIT20 = 36;
+    TFS_ENDOFSPEEDLIMIT25 = 37;
+    TFS_ENDOFSPEEDLIMIT30 = 38;
+    TFS_ENDOFSPEEDLIMIT35 = 39;
+    TFS_ENDOFSPEEDLIMIT40 = 40;
+    TFS_ENDOFSPEEDLIMIT45 = 41;
+    TFS_ENDOFSPEEDLIMIT50 = 42;
+    TFS_ENDOFSPEEDLIMIT55 = 43;
+    TFS_ENDOFSPEEDLIMIT60 = 44;
+    TFS_ENDOFSPEEDLIMIT65 = 45;
+    TFS_ENDOFSPEEDLIMIT70 = 46;
+    TFS_ENDOFSPEEDLIMIT75 = 47;
+    TFS_ENDOFSPEEDLIMIT80 = 48;
+    TFS_ENDOFSPEEDLIMIT85 = 49;
+    TFS_ENDOFSPEEDLIMIT90 = 50;
+    TFS_ENDOFSPEEDLIMIT95 = 51;
+    TFS_ENDOFSPEEDLIMIT100 = 52;
+    TFS_ENDOFSPEEDLIMIT105 = 53;
+    TFS_ENDOFSPEEDLIMIT110 = 54;
+    TFS_ENDOFSPEEDLIMIT115 = 55;
+    TFS_ENDOFSPEEDLIMIT120 = 56;
+    TFS_ENDOFSPEEDLIMIT125 = 57;
+    TFS_ENDOFSPEEDLIMIT130 = 58;
+    TFS_ENDOFSPEEDLIMIT135 = 59;
+    TFS_ENDOFSPEEDLIMIT140 = 60;
+    TFS_ENDOFSPEEDLIMIT145 = 61;
+    TFS_ENDOFSPEEDLIMIT150 = 62;
+    TFS_ENDOFSPEEDLIMIT155 = 63;
+    TFS_ENDOFSPEEDLIMIT160 = 64;
+    TFS_LOWSPEEDLIMIT5 = 65;
+    TFS_LOWSPEEDLIMIT10 = 66;
+    TFS_LOWSPEEDLIMIT15 = 67;
+    TFS_LOWSPEEDLIMIT20 = 68;
+    TFS_LOWSPEEDLIMIT25 = 69;
+    TFS_LOWSPEEDLIMIT30 = 70;
+    TFS_LOWSPEEDLIMIT35 = 71;
+    TFS_LOWSPEEDLIMIT40 = 72;
+    TFS_LOWSPEEDLIMIT45 = 73;
+    TFS_LOWSPEEDLIMIT50 = 74;
+    TFS_LOWSPEEDLIMIT55 = 75;
+    TFS_LOWSPEEDLIMIT60 = 76;
+    TFS_LOWSPEEDLIMIT65 = 77;
+    TFS_LOWSPEEDLIMIT70 = 78;
+    TFS_LOWSPEEDLIMIT75 = 79;
+    TFS_LOWSPEEDLIMIT80 = 80;
+    TFS_LOWSPEEDLIMIT85 = 81;
+    TFS_LOWSPEEDLIMIT90 = 82;
+    TFS_LOWSPEEDLIMIT95 = 83;
+    TFS_LOWSPEEDLIMIT100 = 84;
+    TFS_LOWSPEEDLIMIT105 = 85;
+    TFS_LOWSPEEDLIMIT110 = 86;
+    TFS_LOWSPEEDLIMIT115 = 87;
+    TFS_LOWSPEEDLIMIT120 = 88;
+    TFS_LOWSPEEDLIMIT125 = 89;
+    TFS_LOWSPEEDLIMIT130 = 90;
+    TFS_LOWSPEEDLIMIT135 = 91;
+    TFS_LOWSPEEDLIMIT140 = 92;
+    TFS_LOWSPEEDLIMIT145 = 93;
+    TFS_LOWSPEEDLIMIT150 = 94;
+    TFS_LOWSPEEDLIMIT155 = 95;
+    TFS_LOWSPEEDLIMIT160 = 96;
+    TFS_WEIGHTLIMIT2_4 = 97;
+    TFS_WEIGHTLIMIT5 = 98;
+    TFS_WEIGHTLIMIT5_50 = 99;
+    TFS_WEIGHTLIMIT7 = 100;
+    TFS_WEIGHTLIMIT8 = 101;
+    TFS_WEIGHTLIMIT10 = 102;
+    TFS_WEIGHTLIMIT12 = 103;
+    TFS_WEIGHTLIMIT20 = 104;
+    TFS_WEIGHTLIMIT30 = 105;
+    TFS_WEIGHTLIMIT40 = 106;
+    TFS_WEIGHTLIMIT55 = 107;
+    TFS_HEIGHTLIMIT2_4 = 108;
+    TFS_HEIGHTLIMIT2_9 = 109;
+    TFS_HEIGHTLIMIT3 = 110;
+    TFS_HEIGHTLIMIT3_8 = 111;
+    TFS_HEIGHTLIMIT4 = 112;
+    TFS_HEIGHTLIMIT4_2 = 113;
+    TFS_HEIGHTLIMIT4_3 = 114;
+    TFS_HEIGHTLIMIT4_5 = 115;
+    TFS_HEIGHTLIMIT5 = 116;
+    TFS_WIDTHLIMIT2 = 117;
+    TFS_WIDTHLIMIT2_2 = 118;
+    TFS_WIDTHLIMIT2_5 = 119;
+    TFS_WIDTHLIMIT3 = 120;
+    TFS_CAUTIONFORBADWEATHER = 121;
+    TFS_CAUTIONFORICYROAD = 122;
+    TFS_CAUTIONFORFOG = 123;
+    TFS_CAUTIONFORRAINANDSNOW = 124;
+    TFS_SHARPLEFTTURN = 125;
+    TFS_SHARPRIGHTTURN = 126;
+    TFS_REVERSEDETOUR = 127;
+    TFS_CONTINUOUSDETOUR = 128;
+    TFS_STEEPHILLUPWARDS = 129;
+    TFS_STEEPHILLDOWNWARDS = 130;
+    TFS_CAUTIONFORCHILD = 131;
+    TFS_CONSTRUCTION = 132;
+    TFS_SLOWDOWNFORSHARPCURVEUPWARDS = 133;
+    TFS_SLOWDOWNFORSHARPCURVEDOWNWARDS = 134;
+    TFS_NOTHOROUGHFARE = 135;
+    TFS_NOENTRY = 136;
+    TFS_NOMOTORVEHICLES = 137;
+    TFS_NOPASSING = 138;
+    TFS_SLOWDOWN = 139;
+    TFS_STOP = 140;
+    TFS_NORIGHTTURN = 141;
+    TFS_NOLEFTTURN = 142;
+    TFS_NOGOINGSTRAIGHT = 143;
+    TFS_NOLEFTANDRIGHTTURN = 144;
+    TFS_NOGOINGSTRAIGHTANDLEFTTURN = 145;
+    TFS_NOGOINGSTRAIGHTANDRIGHTTURN = 146;
+    TFS_NOUTURN = 147;
+    TFS_FORMOTORVEHICLEDRIVING = 148;
+    TFS_FORMONMOTORVEHICLEDRVING = 149;
+    TFS_HIGHWAYENTRANCE = 150;
+    TFS_HIGHWAYEXIT = 151;
+    TFS_EXPRESSWAYENTRANCE = 152;
+    TFS_EXPRESSWAYEXIT = 153;
+    TFS_CITYENTRANCE = 154;
+    TFS_CITYEXIT = 155;
+    TFS_RESIDENTIALAREAENTRANCE = 156;
+    TFS_RESIDENTIALAREAEXIT = 157;
+    TFS_ENDOFALLSPEEDLIMIT = 158;
+    TFS_ENDOFVEHICLEPASSINGNOTALLOWED = 159;
+    TFS_FALLINGROCKS = 160;
+    TFS_ALERTOCROSSWIND = 161;
+    TFS_CROSSROAD = 162;
+    TFS_SLIPPERYROAD = 163;
+    TFS_TRAFFICLIGHTSAHEAD = 164;
+    TFS_WARNINGDANGER = 165;
+    TFS_CAUTIONPEDESTRAINCROSSING = 166;
+    TFS_PEDESTRIANCROSSING = 167;
+  };
+  
+  //SupplementarySignTypeFirst（附加标志1的类型）
+  enum BstdsSubType1 {
+    TFS_SUB1_EMPTY = 0;
+    TFS_RAMP = 1;
+    TFS_CAR = 2;
+    TFS_TRUCK = 3;
+    TFS_BUS = 4;
+    TFS_SCHOOL = 5;
+    TFS_ACCODENT = 6;
+  };
+  
+  //SupplementarySignTypeSec（附加标志2的类型）
+  enum BstdsSubType2 {
+    TFS_SUB2_EMPTY = 0;
+    TFS_ICYROAD = 1;
+    TFS_WETROAD = 2;
+    TFS_TMRSTRCT = 3;
+    TFS_FOG = 4;
+    TFS_RSTRCT = 5;
+    TFS_RIEXIT = 6;
+    TFS_LEEXIT = 7;
+    TFS_SPDZN = 8;
+    TFS_PSSGCARTRAILER = 9;
+    TFS_SCHOOLZN = 10;
+    TFS_NIGHT = 11;
+    TFS_ICYORWET = 12;
+    TFS_EXCPTTRACTORS = 13;
+    TFS_DISTANCEIN = 14;
+    TFS_DISTANCEFOR = 15;
+    TFS_ARROWLEFT = 16;
+    TFS_ARROWRIGHT = 17;
+    TFS_RAINY = 18;
+    TFS_SNOWY = 19;
+    TFS_REGION = 20;
+    TFS_TRAILER = 21;
+  };
+  
+//The traffic sign shape (主交通标志的形状)
+enum BstdsTrafficSignShape {
+    TFS_SHAPE_UNKNOWN = 0;
+    TFS_CIRCLE = 1;
+    TFS_RECTANGLE = 2;
+    TFS_TRIANGLE = 3;
+    TFS_INVTRIANGLE = 4;
+    TFS_DIAMOND = 5;
+    TFS_PENTANGLE = 6;
+};
+
+message BstdsTrfcSignHeader {
+    optional int32 protocol_version = 1; 
+    optional double time_stamp = 2;
+    optional double isp_time_stamp = 3;
+    optional int32 traffic_sign_num = 4;   
+    optional int64 check_sum = 5;
+    optional int32 cntr = 6;
+};
+
+message BstdsTrfcSignObj {
+    //用于表征目标追踪；1000ms 内同一个 Id 不能被复用
+    optional int32 id = 1;
+    //if supp tsr and main tsr are related, they share the same group id
+    optional int32 group_id = 2;   
+    //The confidence value used by the functions to determine if the quality of the traffic sign information is good enough to use.
+    //（交通标志识别的置信度）
+    optional float confidence = 3; 
+    //The lateral position of a traffic sign. 3D position of main sign (center), unit:meter (距离交通标志的横向距离)
+    optional float lat_pos = 4; 
+    //The variance for the traffic sign lateral position (横向距离方差)
+    optional float lat_pos_variance = 5; 
+    //The longitudinal position of a road sign, unit:meter (距离标志的纵向距离)
+    optional float long_pos = 6;
+    //The variance for the traffic sign longitudinal position (纵向距离方差)
+    optional float long_pos_variance = 7; 
+    //The vertical position of a traffic sign. 3D position of main sign (center), unit:meter （距离交通标志的垂向距离）
+    optional float vert_pos = 8;
+    //The variance for the traffic sign vertical position (垂向距离方差)
+    optional float vert_pos_variance = 9; 
+    //The width of the traffic sign, unit:meter (交通标志的宽度。当为矩形时，应为矩形的宽；当为圆形时，应为圆的直径。当为三角形时，应为三角形底边的长度)
+    optional float width = 10;
+    //The height of the traffic sign, unit:meter (交通标志的高度。当为矩形时，应为矩形的高；当为圆形时，应为圆的直径；当为三角形时，应为顶点到底边的距离)
+    optional float height = 11;
+    optional int32 main_type = 12; 
+    optional int32 sub_type_1 = 13;
+    optional int32 sub_type_2 = 14; 
+    optional BstdsTrafficSignShape shape = 15;  
+    optional float tsr_sign_value = 16;
+    optional float vert_angle_bot = 17;
+    optional float vert_angle_top = 18;
+    optional float hozl_angle_left = 19;
+    optional float hozl_angle_right = 20;
+    optional int32 bbox_left = 21; 
+    optional int32 bbox_right = 22; 
+    optional int32 bbox_top = 23; 
+    optional int32 bbox_bottom = 24; 
+    optional BstdsBoolean is_near_hozl_edge = 25;
+    optional BstdsBoolean is_near_vert_edge = 26;
+    optional float curbside_distance = 27;
+};
+
+message BstdsTrfcSignInfo {
+    optional BstdsTrfcSignHeader header = 1;
+    repeated BstdsTrfcSignObj trfc_sign = 2;
+};

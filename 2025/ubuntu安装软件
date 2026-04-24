@@ -1,0 +1,19 @@
+1. nvidia驱动
+ubuntu-drivers devices
+会显示driver   : nvidia-driver-535 - distro non-free recommended
+安装 recommended的
+sudo apt install nvidia-driver-535
+
+2. 22.04安装ros1
+# 1. 添加移植版的 PPA 源
+sudo add-apt-repository ppa:ros-for-jammy/noetic
+
+# 2. 更新软件包列表
+sudo apt update
+
+# 3. 安装完整的 ROS Noetic 桌面版
+sudo apt install ros-noetic-desktop-full
+
+
+3. sudo apt install python-is-python3
+python指令可以识别

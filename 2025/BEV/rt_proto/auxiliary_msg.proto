@@ -1,0 +1,58 @@
+syntax = "proto2";
+import "common.proto";
+import "camerastate_msg.proto";
+package autoplt.canfd;
+
+enum BstdsRoadCondition {
+    RC_UNKNOWN             = 0;
+    RC_DRY                 = 1;
+    RC_WET                 = 2;
+};
+
+enum BstdsDayTime {
+    DT_UNKNOWN             = 0;
+    DT_DAY                 = 1;
+    DT_NIGHT               = 2;
+};
+
+enum BstdsLocationScenario {
+    LS_UNKNOWN             = 0;
+    LS_URBAN               = 1;
+    LS_HIGHWAY             = 2;
+    LS_OVERPASS            = 3;
+    LS_UNDERGROUND_PARKING = 4;
+    LS_TUNNEL              = 5;
+};
+
+enum BstdsWeather {
+    W_UNKNOWN              = 0;
+    W_SUNNY                = 1;
+    W_RAINY                = 2;
+    W_SNOW                 = 3;
+    W_FOGGY                = 4;
+    W_CLOUDY               = 5;
+};
+
+message BstdsAuxiliaryHeader {
+    optional int32 object_number = 1;
+};
+
+message BstdsAuxiliaryObj {
+    optional BstdsCameraID src_cam = 1;
+    optional bool valid = 2;
+    optional BstdsRoadCondition road_condition       = 3;
+    optional BstdsDayTime day_time                   = 4;
+    optional BstdsLocationScenario location_scenario = 5;
+    optional BstdsWeather weather                    = 6;
+    optional BstdsCameraID id = 7;
+    optional BstdsBoolean block_age = 8;
+    optional BstdsBoolean condensation = 9;
+    optional BstdsBoolean stained = 10;
+    optional BstdsBoolean failsafe = 11;
+    optional bool isunderoverpass = 12;
+};
+
+message BstdsAuxiliaryInfo {
+    optional BstdsAuxiliaryHeader header = 1;
+    repeated BstdsAuxiliaryObj auxObjs   = 2;
+};

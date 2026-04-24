@@ -1,0 +1,28 @@
+syntax = "proto2";
+import "lane_msg.proto";
+
+package autoplt.canfd;
+
+enum BstdsReferenceLineType {
+    REF_LINE_TYPE_STRAIGHT      = 0;
+    REF_LINE_TYPE_LEFT_TURN_    = 1;
+    REF_LINE_TYPE_RIGHT_TURN_   = 2;
+    REF_LINE_TYPE_LEFT_U_TURN   = 3;
+    REF_LINE_TYPE_RIGHT_U_TURN  = 4;
+};
+message BstdsBevPathHeader{
+    optional double timestamp = 1;
+    optional int32  num_of_path = 2;
+}
+message BstdsReferenceLine {
+    optional int32 id                       =1;
+    //the type indicates left turn,left u turn,straight ahead or right uturn
+    optional BstdsReferenceLineType type    =2;
+    optional BstdsLanePoints laneMarkPoints =3;
+    optional int32 lane_id                  =4;
+};
+
+message BstdsReferenceLineInfo {
+    optional BstdsBevPathHeader header = 1;
+    repeated BstdsReferenceLine reference_line =2;
+};

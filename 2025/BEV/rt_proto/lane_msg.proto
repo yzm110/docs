@@ -1,0 +1,322 @@
+syntax = "proto2";
+import "common.proto";
+package autoplt.canfd;
+
+enum BstdsLaneChange {
+  NO_LANE_CHANGE = 0;
+  CHANGE_TO_LEFT = 1;
+  CHANGE_TO_RIGHT = 2;
+};
+
+//Whether the current road belongs to highway or  tunnel (当前道路是否属于高速高架或隧道)
+enum BstdsLnRoadType {
+  ROADTYPE_NONE = 0;
+  ROADTYPE_HIGHWAY = 1;
+  ROADTYPE_NOT_HIGHWAY = 2;
+};
+  
+//Indicate which lane the ego vehice is driving on (自车正在行驶的车道，0表示未知，1表示右侧第一车道，2表示右侧第二车道，以此类推)
+enum BstdsAssignLaneNumber {
+  LNASS_UNKNOWN = 0;
+  LNASS_RIGHT_1 = 1;
+  LNASS_RIGHT_2 = 2;
+  LNASS_RIGHT_3 = 3;
+  LNASS_RIGHT_4 = 4;
+  LNASS_RIGHT_5 = 5;
+  LNASS_RIGHT_6 = 6;
+  LNASS_RIGHT_7 = 7;
+};
+
+//Color of the lane (车道线颜色)
+enum BstdsLaneColor {
+  LINE_COLOR_WHITE = 0;
+  LINE_COLOR_YELLOW = 1;
+  LINE_COLOR_RED = 2;
+  LINE_COLOR_ORANGE = 3;
+  LINE_COLOR_GREEN = 4;
+  LINE_COLOR_OTHER = 5;
+};
+
+//Type of the lane (车道线类型)
+enum BstdsLaneType {
+  LINE_UNKNOWN = 0;
+  LINE_SOLID = 1;
+  LINE_DASHED = 2;
+  LINE_DOUBLESOLID = 3;
+  LINE_DOUBLEDASHED = 4;
+  LINE_SOLIDDASHED = 5; /**< zuo实you虚 */
+  LINE_DASHEDSOLID = 6; /**< zuo虚you实 */
+  LINE_FISHBONE = 7;
+  LINE_TEMPORARY = 8;
+  LINE_CURB = 9;
+  LINE_CONE = 10;
+};
+
+//Tracking status（车道线追踪状态）
+enum BstdsLnTrackingStatus {
+  LNTRK_NOMARKING_DETECTED = 0;
+  LNTRK_DETECTED_MARKING_TRACKED = 1; /**< 被追踪*/
+  LNTRK_CLOSE_RANGE_PREDICTED = 2; /**< 近距离预测 */
+  LNTRK_FAR_RANGE_PREDICTED = 3; /**< 远距离预测 */
+  LNTRK_PREDICTED = 4; /**< 全距离预测 */
+};
+  
+//Tracking status（车道线追踪状态）
+enum BstdsRoTrackingStatus {
+  ROTRK_NOMARKING_DETECTED = 0;
+  ROTRK_DETECTED_MARKING_TRACKED = 1; /**< 被追踪*/
+  ROTRK_CLOSE_RANGE_PREDICTED = 2; /**< 近距离预测 */
+  ROTRK_FAR_RANGE_PREDICTED = 3; /**< 远距离预测 */
+  ROTRK_PREDICTED = 4; /**< 全距离预测 */
+};
+
+//Indicate the lane merge/spilt type (表征前方车道线发生车道线分叉还是合并)
+enum BstdsLnEvenType {
+  LNEVENT_NONE = 0;
+  LANE_MERGE = 1;
+  LANE_SPLIT = 2;
+};
+
+//Indicate whether ego vehicle is changing the lane (表征自车是否正在进行车道变换)
+enum BstdsEventLaneNumber {
+  LNEVT_UNKNOWN = 0;
+  LNEVT_LEFT = 1;
+  LNEVT_RIGHT = 2;
+  LNEVT_OTHER_LEFT = 3;
+  LNEVT_OTHER_RIGHT = 4;
+  LNEVT_LEFT_2 = 5;
+  LNEVT_RIGHT_2 = 6;
+};
+
+message BstdsLaneHeader {
+  optional int32 protocol_version = 1;
+  optional double time_stamp = 2;
+  optional BstdsLnRoadType road_type = 3;
+  optional double isp_time_stamp = 4;
+  optional int64 check_sum = 5;
+  optional int32 cntr = 6;
+  optional int32 num_oflines = 7;
+};
+
+message BstdsLaneEvent {
+  //Number of lanes in the direction of ego vehicle driving on (自车行驶方向的车道总数量，不应包括紧急停车带和应急车道)
+  optional int32 number_of_lanes = 1;
+  //Indicate which lane the ego vehice is driving on
+  optional BstdsAssignLaneNumber assigned_lane_number = 2;
+  //Indicate whether ego vehicle is changing the lane (表征自车是否正在进行车道变换)
+  optional BstdsLaneChange lane_change = 3;
+};
+
+message BstdsPoint {
+  optional float pointX = 1;
+  optional float pointY = 2;
+};
+
+message BstdsLanePoints {
+  optional int32 validSize = 1;
+  repeated BstdsPoint lanePoints = 2;
+};
+message  Bstds_DummyLinkIds{
+  optional int32 validSize = 1;
+  repeated int32 value = 2; 
+};
+message BstdsLaneMarking {
+  //Valid state of the lane (车道线是否有效)
+  optional BstdsBoolean valid = 1;
+  //Id (车道线Id)
+  optional int32 id = 2;
+  //unit:meter, 车道线宽度
+  optional float mrk_width = 3;
+  //Color of the lane (车道线颜色)
+  optional BstdsLaneColor color = 4;
+  //Type of the lane (车道线类型)
+  optional BstdsLaneType type = 5;
+  //The longitudinal distance (x) for which the type of lane changes, unit:meter (车道线类型变化点距离自车的纵向距离)
+  optional float typ_chg_point = 6;
+  //The type of the lane after the lane change point (车道线类型发生变化后，车道线的类型)
+  optional BstdsLaneType typ_aft_chg_point = 7;
+  //The angle between the ramp lane line and the main lane line (positive left and negative right)(匝道车道线与主车道线间的夹角（左正右负))
+  optional float inter_section_angle = 8;
+  //Track statu (车道线追踪状态)
+  optional BstdsLnTrackingStatus trk_sts = 9;
+  //Mean square deviation between measurements and model points.（车道线模型适配度）
+  optional float meas_qly = 10;
+  //Describes quality of the detection. (表征车道线模型的质量, 范围从 0-100)
+  optional float mdl_qly = 11;
+
+  optional BstdsBoolean is_first_valid = 12;  /**< valid state of the first lane segment  */
+  optional BstdsBoolean is_second_valid = 13;  /**< valid state of the second segement */
+
+  //The zero order coefficient (C0) in the rear lane clothoid model which the lateral distance to the
+  //from the vehicle coordinate system a-axis（F(x) = C0 + C1x + C2x^2 + C3x^3）( C0Minus表征后方曲线的C0)
+  optional float c0_minus = 14;
+  //The variance of the C0Minus coefficient in the rear lane clothoid model which the lateral distance to the lane (系数C0Minus的方差) 
+  optional float c0_minus_variance = 15;
+  optional float c1_minus = 16;
+  optional float c1_minus_variance = 17;
+  optional float c2_minus = 18;
+  optional float c2_minus_variance = 19;
+  optional float c3_minus = 20;
+  optional float c3_minus_variance = 21;
+  //The longitudinal distance (x) for which the rear lane clothoid model starts, unit:meter (后方车道线曲线起始点距离自车的纵向距离)
+  optional float minus_start_point = 22;
+  //The longitudinal distance (x) for which the rear lane clothoid model ends. (后方曲线终止点距离自车的纵向距离)
+  optional float minus_end_point = 23;
+
+  //The zero order coefficient (C0) in the first clothoid model which the lateral distance to the
+  //from the vehicle coordinate system a-axis（F(x) = C0 + C1x + C2x^2 + C3x^3）(C0First表征第一段曲线的C0)
+  optional float c0_first = 24; 
+  optional float c0_first_variance = 25; 
+  optional float c1_first = 26;
+  optional float c1_first_variance = 27;
+  optional float c2_first = 28;
+  optional float c2_first_variance = 29;
+  optional float c3_first = 30;
+  optional float c3_first_variance = 31;
+  //The longitudinal distance (x) for which the first clothoid model starts, unit:meter (第一段曲线起始点距离自车的纵向距离)
+  optional float first_start_point = 32;
+  //The longitudinal distance (x) for which the first clothoid model ends, unit:meter (第一段曲线终止点距离自车的纵向距离)
+  optional float first_end_point = 33;
+
+  //The zero order coefficient (C0) in the second clothoid model which the lateral distance to the
+  //from the vehicle coordinate system a-axisF(x) = C0 + C1x + C2x^2 + C3x^3 (C0Sec表征第二段曲线的C0)
+  optional float c0_second = 34;
+  optional float c0_second_variance = 35;
+  optional float c1_second = 36;
+  optional float c1_second_variance = 37;
+  optional float c2_second = 38;
+  optional float c2_second_variance = 39;
+  optional float c3_second = 40;
+  optional float c3_second_variance = 41;
+  //The longitudinal distance (x) for which the second clothoid model starts (第二段曲线起始点距离自车的纵向距离)
+  optional float second_start_point = 42;
+  //The longitudinal distance (x) for which the first clothoid model ends (第二段曲线终止点距离自车的纵向距离)
+  optional float second_end_point = 43;
+  //The longitudinal distance (x) for which the predicted clothoid model start, unit:meter (预测曲线起始点距离自车的纵向距离）
+  optional float pri_start_point = 44;
+  //The longitudinal distance (x) for which the predicted clothoid model ends, unit:meter (预测曲线终止点距离自车的纵向距离）
+  optional float pri_end_point = 45;
+  //confidence signal for FUSA (功能安全是否验证的flag)
+  optional BstdsBoolean is_verified = 46;
+  optional int32 age = 47;
+  
+  // 车道线真实起点距离自车的纵向距离
+  optional float actStartPoint = 48;
+  // 车道线真实终点点距离自车的纵向距离
+  optional float actEndPoint = 49;
+
+  optional BstdsLanePoints laneMarkPoints = 50;
+  optional int32 lane_locationtype = 51;
+  optional BstdsBoolean if_horizontal = 52;
+  optional int32 lane_attribute = 53;
+  optional int32 curb_attribute =  54;
+  optional int32 divide_lane_track_id = 55;
+  optional BstdsBoolean if_link = 56;
+  //link_start_point contain 2 value x/y
+  optional float link_start_point_x = 57;
+  optional float link_start_point_y = 58;
+  optional Bstds_DummyLinkIds  dummy_linkids = 59;
+  optional BstdsLanePoints link_end_points = 60;
+};
+
+message BstdsLaneEventGroup {
+  optional BstdsLnEvenType type = 1;
+  optional BstdsEventLaneNumber lane_number = 2;
+  //Indicate the distance to where the lane event happen (表征发生车道线事件的点距离自车的纵向距离)
+  optional float longit_distance = 3;
+  //F(x) = C0 + C1x + C2x^2 + C3x^3, C0表征车道线分叉后或者合并前的曲线的C0
+  optional float c0 = 4;
+  //C0的方差
+  optional float c0_variance = 5;
+  //F(x) = C0 + C1x + C2x^2 + C3x^3, C1表征车道线分叉后或者合并前的曲线的C1
+  optional float c1 = 6;
+  //C1的方差
+  optional float c1_variance = 7;
+  //F(x) = C0 + C1x + C2x^2 + C3x^3, C2表征车道线分叉后或者合并前的曲线的C2
+  optional float c2 = 8;
+  //C2的方差
+  optional float c2_variance = 9;
+  //F(x) = C0 + C1x + C2x^2 + C3x^3, C3表征车道线分叉后或者合并前的曲线的C3
+  optional float c3 = 10;
+  //C3的方差
+  optional float c3_variance = 11;
+  //Indicate the distance to where the lane event happen (表征发生车道线事件的点距离自车的横向距离)
+  optional float lateral_distance = 12;
+  // 车道线真实起点距离自车的纵向距离
+  optional float actStartPoint = 13;
+  // 车道线真实终点点距离自车的纵向距离
+  optional float actEndPoint = 14;
+  
+  //Mean square deviation between measurements and model points.（车道线模型适配度）
+  optional float meas_qly = 15;
+  //Describes quality of the detection. (表征车道线模型的质量, 范围从 0-100)
+  optional float mdl_qly = 16;
+  //Color of the lane (车道线颜色)
+  optional BstdsLaneColor laneColor = 17;
+  //Type of the lane (车道线类型)
+  optional BstdsLaneType laneType = 18;
+
+  optional int32 inner_lane_id = 19;
+  optional int32 outer_lane_id = 20;
+  optional int32 common_lane_id = 21;
+  optional int32 track_id = 22;
+
+};
+
+message BstdsRoadedge {
+  //The id number of the road edge track (道路边沿ID)
+  optional int32 id = 1;
+  //Valid state of the lane (道路边沿是否有效)
+  optional BstdsBoolean valid = 2;
+  //Described whether the road edge is transverible or not (表明当前的道路边沿是否可穿越)
+  optional BstdsBoolean is_transverible = 3;
+  //The track status (路沿识别的追踪状态)
+  optional BstdsRoTrackingStatus trk_sts = 4;
+  optional float c0 = 5;
+  optional float c0_variance = 6;
+  optional float c1 = 7;
+  optional float c1_variance = 8;
+  optional float c2 = 9;
+  optional float c2_variance = 10;
+  optional float c3 = 11;
+  optional float c3_variance = 12;
+  //The longitudinal distance (x) for which the double clothoid model starts. (道路边沿探测的起始纵向距离)
+  optional float long_distance_to_start = 13;
+  //The maximum longitudinal distance (x) for which the double clothoid model is valid. (道路边沿探测的最远纵向距离)
+  optional float long_distance_to_end = 14;
+  //Mean square deviation between measurements and model points.（表明输出曲线匹配度的好坏）
+  optional float meas_qly = 15;
+  //Describes quality of the detection. Gradient strength, number of measurements, classification confidence, etc. (表明路沿识别的质量) 
+  optional float mdl_qly = 16;
+  //confidence signal for FUSA (功能安全是否验证的flag)
+  optional BstdsBoolean is_verified = 17;
+};
+
+message BstdsFrvLaneInfo {
+  optional BstdsLaneHeader header = 1;
+  repeated BstdsLaneMarking lane_mrk = 2;
+  optional BstdsLaneEvent event = 3;
+  repeated BstdsLaneEventGroup event_group = 4;
+}
+
+message BstdsSivLaneInfo {
+  optional BstdsLaneHeader header = 1;
+  optional BstdsLaneMarking lane_mrk_le = 2;
+  optional BstdsLaneMarking lane_mrk_ri = 3;
+  optional BstdsLaneMarking lane_mrk_sec_le = 4;
+  optional BstdsLaneMarking lane_mrk_sec_ri = 5;
+  optional BstdsLaneMarking lane_temp_1 = 6;
+  optional BstdsLaneMarking lane_temp_2 = 7;
+  optional BstdsLaneEvent event = 8;
+  repeated BstdsLaneEventGroup event_group = 9;
+  optional BstdsRoadedge road_edge_le = 10;
+  optional BstdsRoadedge road_edge_ri = 11;
+}
+
+message BstdsRrvLaneInfo {
+  optional BstdsLaneHeader header = 1;
+  optional BstdsLaneMarking lane_mrk_le = 2;
+  optional BstdsLaneMarking lane_mrk_ri = 3;
+  optional BstdsLaneMarking lane_mrk_sec_le = 4;
+  optional BstdsLaneMarking lane_mrk_sec_ri = 5;
+}

@@ -1,0 +1,27 @@
+syntax = "proto2";
+package autoplt.canfd;
+
+//Surface condition of the road (路面状况)
+enum BstdsSurfaceCondition {
+  SF_UNKNOWN = 0;
+  SF_DRY = 1;
+  SF_PUDDLES = 2;
+  SF_SNOW = 3;
+};
+
+//Time of day: Day or Night
+enum BstdsTimeOfDay {
+  TOD_IDLE = 0;
+  TOD_DAY = 1;
+  TOD_NIGHT = 2;
+};
+
+message BstdsExtendedInfo {
+  optional int32 protocol_version = 1;
+  //Exposure time of midpoint of the image, unit: second (图像曝光中间点的时间戳)
+  optional double time_stamp = 2;
+  optional BstdsSurfaceCondition surface_condition = 3;
+  optional BstdsTimeOfDay time_of_day = 4;
+};
+
+  

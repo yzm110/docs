@@ -1,0 +1,58 @@
+syntax = "proto2";
+import "common.proto";
+package autoplt.canfd;
+
+message BstdsTrfcLightHeader {
+    optional int32 protocol_version = 1;
+    optional double time_stamp = 2;
+    optional int32 traffic_light_num = 3;
+    optional int64 check_sum = 4;
+    optional int32 cntr = 5;
+    optional double isp_time_stamp = 6;
+};
+
+enum BstdsTrfcLiColor {
+    TFL_COLOR_UNKNOWN = 0;
+    TFL_COLOR_RED = 1;
+    TFL_COLOR_YELLOW = 2;
+    TFL_COLOR_GREEN = 3;
+    TFL_COLOR_BLINKGREEN = 4;
+    TFL_COLOR_BLINKYELLOW = 5;
+    TFL_COLOR_BLINDRED = 6;
+};
+
+enum BstdsTrfcLiType {
+    TFL_TYPE_UNKNOWN = 0;
+    TFL_TYPE_SOLIDCIRCLE = 1;
+    TFL_TYPE_LEFTARROW = 2;
+    TFL_TYPE_RIGHTARROW = 3;
+    TFL_TYPE_FORWARDARROW = 4;
+    TFL_TYPE_LEFTFORWARDARROW = 5;
+    TFL_TYPE_RIGHTFORWARDARROW = 6;
+    TFL_TYPE_UTURN = 7;
+};
+
+message BstdsTrfcLightObj {
+    //用于表征目标追踪；1000ms 内同一个 Id 不能被复用
+    optional int32 id = 1;
+    //The confidence value used by the functions to determine if the quality of the traffic light information is good enough to use (交通灯识别的置信度)   
+    optional float confidence = 2; 
+    //The laterial position of a traffic light (交通灯到自车的横向距离)
+    optional float latpos = 3;
+    //The longitudinal position of a traffic light (交通灯到自车的纵向距离)
+    optional float longpos = 4;
+    //The vertical position of a traffic light (交通灯到自车参考点的垂向距离)
+    optional float vertpos = 5;
+    optional BstdsObjLaneAssignment lane_assignment = 6;  
+    optional BstdsTrfcLiColor color = 7; 
+    optional BstdsTrfcLiType type = 8;
+    optional int32 bbox_left = 9; 
+    optional int32 bbox_right = 10; 
+    optional int32 bbox_top = 11; 
+    optional int32 bbox_bottom = 12; 
+};
+
+message BstdsTrfcLightInfo {
+    optional BstdsTrfcLightHeader header = 1;
+    repeated BstdsTrfcLightObj trfc_li = 2;
+};

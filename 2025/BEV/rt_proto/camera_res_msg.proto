@@ -1,0 +1,112 @@
+syntax = "proto2";
+
+package autoplt.canfd;
+
+message BstdsCameraObjHeader {
+  optional int32 protocol_version = 1;
+  optional double time_stamp = 2;
+  optional int32 object_number = 3; 
+  optional int32 img_frame_ctr = 4; 
+}
+
+message BstdsCameraObjObject {
+  optional int32 id = 1;
+  optional int32 type = 2;
+  optional int32 bbox_left = 3;
+  optional int32 bbox_right = 4;
+  optional int32 bbox_top = 5;
+  optional int32 bbox_bottom = 6; 
+}
+
+message BstdsCameraTrfcSignHeader {
+  optional int32 protocol_version = 1;
+  optional double time_stamp = 2;
+  optional int32 traffic_sign_num = 3;  
+  optional double isp_time_stamp = 4;
+}
+
+message BstdsCameraTrfcSignObj {
+  optional int32 id = 1;
+  optional int32 group_id = 2;
+  optional int32 bbox_left = 3;
+  optional int32 bbox_right = 4;
+  optional int32 bbox_top = 5;
+  optional int32 bbox_bottom = 6; 
+}
+
+message BstdsCameraTrfcLightHeader {
+  optional int32 protocol_version = 1;
+  optional double time_stamp = 2;
+  optional int32 traffic_light_num = 3;  
+  optional double isp_time_stamp = 4;
+}
+
+message BstdsCameraTrfcLightObj {
+  optional int32 id = 1;
+  optional int32 bbox_left = 2;
+  optional int32 bbox_right = 3;
+  optional int32 bbox_top = 4;
+  optional int32 bbox_bottom = 5; 
+}
+
+
+
+message BstdsCameraFrvObjectInfo {
+  optional BstdsCameraObjHeader header = 1;
+  repeated BstdsCameraObjObject objects = 2;
+}
+
+message BstdsCameraSivObjectInfo {
+  optional BstdsCameraObjHeader header = 1;
+  repeated BstdsCameraObjObject objects = 2;
+}
+
+message BstdsCameraRrvObjectInfo {
+  optional BstdsCameraObjHeader header = 1;
+  repeated BstdsCameraObjObject objects = 2;
+}
+
+message BstdsCameraTrfcSignInfo {
+  optional BstdsCameraTrfcSignHeader header = 1;
+  repeated BstdsCameraTrfcSignObj trfc_sign = 2;
+}
+
+message BstdsCameraTrfcLightInfo {
+  optional BstdsCameraTrfcLightHeader header = 1;
+  repeated BstdsCameraTrfcLightObj trfc_li = 2;
+}
+
+message BstdsCameraPlatesHeader {
+  optional int32 protocol_version = 1;
+  optional double time_stamp = 2;
+  optional double isp_time_stamp = 3;  
+  optional int32 plates_num = 4;  
+}
+
+message BstdsCameraPlatesObj {
+  optional int32 id = 1;
+  optional float x_min = 2;
+  optional float y_min = 3;  
+  optional float x_max = 4;
+  optional float y_max = 5;
+}
+
+message BstdsCameraPlatesInfo {
+  optional BstdsCameraPlatesHeader header = 1;
+  repeated BstdsCameraPlatesObj plates = 2;
+}
+
+message BstdsCameraFrvMsg {
+  optional BstdsCameraFrvObjectInfo obj_info = 1;
+  optional BstdsCameraTrfcSignInfo trfc_sign_info = 2;
+  optional BstdsCameraTrfcLightInfo trfc_li_info = 3;
+  optional BstdsCameraPlatesInfo plates_info = 4;
+}
+
+message BstdsCameraSivMsg {
+  optional BstdsCameraSivObjectInfo obj_info = 1;
+}
+
+message BstdsCameraRrvMsg {
+  optional BstdsCameraRrvObjectInfo obj_info = 1;
+}

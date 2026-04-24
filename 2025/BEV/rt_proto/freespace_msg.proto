@@ -1,0 +1,39 @@
+syntax = "proto2";
+import "common.proto";
+package autoplt.canfd;
+
+message BstdsFSHeader {
+    optional int32 protocol_version = 1;
+    //Exposure time of midpoint of the image, unit: second (图像曝光中间点的时间戳)
+    optional double time_stamp = 2;
+    //confidence signal for FUSA (功能安全是否验证的flag)
+    optional BstdsBoolean is_verified = 3;  
+    optional int64 check_sum = 4;
+    optional int32 cntr = 5;
+    optional double isp_time_stamp = 6;
+};
+
+//自车的可行驶区域
+enum BstdsBorderType {
+    FS_BORDER_NONE = 0;
+    FS_BORDER_ROADUSER = 1;
+    FS_BORDER_ROADEDGE = 2;
+    FS_BORDER_UNKNOWN = 3;  
+};
+
+message BstdsFSSector {
+    //The Absolute distance to the road like surface sector end point, unit: meter（到每个freespace sector的绝对距离）
+    optional float border_dst = 1;
+    //Semantic description of surface border (当前freespace sector的边界目标类型，如道路使用者，路边沿等)
+    optional BstdsBorderType border_type = 2;
+    optional float confidence = 3;
+    //Height of road like surface border (Freespace sector的高度)
+    optional float height = 4;
+    //unit: degree
+    optional float angle = 5;
+};
+
+message BstdsFreespaceInfo {
+    optional BstdsFSHeader header = 1;
+    repeated BstdsFSSector sectors = 2;
+};

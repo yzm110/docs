@@ -1,0 +1,63 @@
+1. 创建docker image
+docker build -t ubuntu-dev:20.04 -f Dockerfile .
+
+2. 查看image
+docker images
+
+3. 创建container; 将主机/home/zhengminyou/docker22.04/workspace/挂载到docker的/workspace下
+docker run -it \
+  --name monolanemapping \
+  -v /home/zhengminyou/docker22.04/workspace/:/workspace:rw \
+  -w /workspace \
+  --user 1000:1000 \
+  ubuntu-dev:20.04
+  
+  4. 停止容器
+  docker stop <container-id|name>
+  
+  删除容器
+  docker rm <container-id|name>
+  
+  删除镜像
+  docker rmi <image-id|repo:tag>
+  
+  启动docker
+  docker restart 92aa72ba9aa5 && docker exec -it 92aa72ba9aa5 /bin/bash
+  
+ 5. 利用已有的docker，新建docker
+ 
+ 5.1 将当前容器（包括你在里面做的所有更改）保存为一个新的镜像：
+ docker commit monolanemapping monolanemapping-with-x11:latest
+
+ 5.2 添加配置，新建docker
+ docker run -it \
+  --gpus all \
+  -v /etc/localtime:/etc/localtime:ro \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+  -e DISPLAY=$DISPLAY \
+  -e NVIDIA_DRIVER_CAPABILITIES=all \
+  -e GDK_SCALE \
+  -e GDK_DPI_SCALE \
+  --name monolanemapping-new \
+  -v /home/zhengminyou/docker22.04/workspace/:/workspace:rw \
+  -w /workspace \
+  --user 1000:1000 \
+  monolanemapping-with-x11:latest
+  
+  docker run -it \
+  --gpus all \
+  --device /dev/dri \                                      
+  -v /etc/localtime:/etc/localtime:ro \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+  -e DISPLAY=$DISPLAY \
+  -e NVIDIA_DRIVER_CAPABILITIES=all \
+  -e GDK_SCALE \
+  -e GDK_DPI_SCALE \
+  --name monolanemapping-new \
+  -v /home/zhengminyou/docker22.04/workspace/:/workspace:rw \
+  -w /workspace \
+  --user 1000:1000 \
+  monolanemapping-with-x11:latest
+  
+    启动docker
+  docker restart 5badca5d6d5d && docker exec -it 5badca5d6d5d /bin/bash

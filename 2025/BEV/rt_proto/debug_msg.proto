@@ -1,0 +1,43 @@
+syntax = "proto2";
+package autoplt.canfd;
+
+enum BstdsPoseErrCode {
+    POSE_SUCC                                 = 0; // exact ts or interplated
+    POSE_ERR_QUEUE_EMPTY                      = 1; // queue empty
+    POSE_ERR_QUEUE_TS_BEHIND                  = 2; // query ts smaller than the smallest queue ts
+    POSE_ERR_QUEUE_TS_BEYOND_0_TO_25_MS       = 3; // query ts bigger than the biggest queue ts by 0-25 ms
+    POSE_ERR_QUEUE_TS_BEYOND_25_TO_75_MS      = 4; // query ts bigger than the biggest queue ts by 25-75 ms
+    POSE_ERR_QUEUE_TS_BEYOND_75_MS            = 5; // query ts bigger than the biggest queue ts by more than 75 ms
+};
+
+message BstdsQueueFrameNo {
+    optional int32 attIn                      = 1;
+    optional int32 tp2In                      = 2;
+    optional int32 tp2ppIn                    = 3;
+    optional int32 gsIn                       = 4;
+};
+
+message BstdsPoseStatus {
+    repeated BstdsPoseErrCode modelPose       = 1;
+    optional BstdsPoseErrCode ppPose          = 2;
+    repeated BstdsPoseErrCode gsPose          = 3;
+    optional bool poseConsistent              = 4;
+};
+
+enum BstdsLowLayerType {
+    TYPE_NONE                        = 0;
+    TYPE_PEDESTRAIN                  = 1;
+    TYPE_CYCLIST                     = 2;
+    TYPE_CROSSWALK                   = 3;
+    TYPE_STOPLINE                    = 4;
+    TYPE_DOUBLE_YELLOW               = 5;
+};
+
+message BstdsDebugInfo {
+    optional BstdsQueueFrameNo queFrmNo       = 1;
+    optional BstdsPoseStatus poseStatus       = 2;
+    optional string canBlockRate              = 3;
+    optional int32 offsetnetValidROIPixelCnt  = 4;
+    optional bool offsetnetAbsoffsetOverThres = 5;
+    optional BstdsLowLayerType lowLayerType   = 6;  // if multiple types occur, only record last type found
+};

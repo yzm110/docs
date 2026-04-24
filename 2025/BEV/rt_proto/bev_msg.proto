@@ -1,0 +1,111 @@
+
+syntax = "proto2";
+import "common.proto";
+package autoplt.canfd;
+import "lane_msg.proto";
+import "obj_msg.proto";
+import "path_msg.proto";
+import "traffic_sign_msg.proto";
+import "traffic_light_msg.proto";
+import "lsr_msg.proto";
+import "static_msg.proto";
+import "map_msg.proto";
+import "camerastate_msg.proto";
+import "auxiliary_msg.proto";
+import "debug_msg.proto";
+
+// enum BstdsBevObjectType {
+//     CAR = 0;
+//     PEDESTRIAN = 1;
+//     CYCLIST = 2;
+//     OBJECT_UNKNOWN = 3;
+// }
+
+// message BstdsBevObject {
+//     optional float x = 1;
+//     optional float y = 2;
+//     optional float z = 3;
+//     optional float length = 4;
+//     optional float width = 5;
+//     optional float height = 6;
+//     optional float yaw = 7;
+//     optional float velocity_x = 8;
+//     optional float velocity_y = 9;
+//     optional float confidence = 10;
+//     optional BstdsBevObjectType type = 11;
+//     optional double timestamp = 12;
+//     optional int32 id = 13;
+//     optional BstdsBoolean is_detected = 14;
+// }
+
+// message BstdsBevTrajectory {
+//     repeated BstdsBevObject objects = 1;
+//     optional int32 history_accumulated_time = 2;
+// }
+
+enum BstdsBevLaneClusterType {
+    LANE = 0;
+    CURBSIDE = 1;
+    STOP_LINE = 2;
+    LANE_UNKNOWN = 3;
+}
+
+message BstdsBevLaneNode {
+    optional int32 id = 1;
+    optional float x = 2;
+    optional float y = 3;
+    optional float confidence = 4;
+    repeated int32 in_edge_ids = 5;
+    repeated int32 out_edge_ids = 6;
+}
+
+message BstdsBevLaneEdge {
+    optional int32 id = 1;
+    optional int32 in_node_id = 2;
+    optional int32 out_node_id = 3;
+    optional float confidence = 4;
+}
+message BstdsBevLaneCluster {
+    repeated BstdsBevLaneNode nodes = 1;
+    repeated BstdsBevLaneEdge edges = 2;
+    optional BstdsBevLaneClusterType type = 3; 
+    optional int32 timestamp = 4;
+    optional int32 id = 5;
+}
+
+message BstdsSharedFrvInfo {
+    optional int64 time_stamp = 1;
+    optional bool isValid = 2;
+    optional BstdsTrfcSignInfo trfc_sign_info = 3;
+    optional BstdsTrfcLightInfo trfc_light_info = 4;
+    optional BstdsLsrInfo lsr_info = 5;
+    optional BstdsStaticObjectInfo static_obj_info = 6;
+}
+
+message BstdsImage {
+    optional int32 size = 1;
+    optional bytes data = 2;
+    optional string format = 3;
+}
+
+message BstdsBevMsg {
+    optional BstdsFrvObjectInfo obj_info = 1; 
+    optional BstdsFrvObjectInfo obj_info_net = 2;
+    repeated BstdsBevLaneCluster laneclusters = 3;
+    optional BstdsBevStopLineInfo  stopline_info= 4;
+    optional BstdsBevCrosswalkInfo cw_info = 5;
+    optional BstdsBevArrowInfo arrow_info = 6;
+    optional BstdsFrvLaneInfo lane_info = 7;
+    optional double timestamp = 8;
+    optional float ego_velocity = 9;
+    optional BstdsReferenceLineInfo path_info = 10;
+    optional BstdsSharedFrvInfo shared_frv_info = 11;
+    optional BstdsMapInfo map_info = 12;
+    optional BstdsBevStopLineInfo  bump_info = 13; 
+    optional BstdsBevCrosswalkInfo  npa_info = 14;
+    optional BstdsImage bevpp_debug_image = 15;
+    repeated BstdsCameraState cam_state_info = 16;
+    optional BstdsAuxiliaryInfo auxiliary_info = 17;
+    repeated uint32  mask  = 18;
+    optional BstdsDebugInfo debug_info = 19;
+}

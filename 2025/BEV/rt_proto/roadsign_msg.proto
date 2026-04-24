@@ -1,0 +1,86 @@
+syntax = "proto2";
+package autoplt.canfd;
+
+enum BstdsRSLane {
+  RS_LANE_UNASSIGNED = 0;
+  RS_LANE_CURRENT = 1;
+  RS_LANE_FIRSTLEFT = 2;
+  RS_LANE_SECONDLEFT = 3;
+  RS_LANE_FIRSTRIGHT = 4;
+  RS_LANE_SECONDRIGHT = 5;
+};  
+
+enum BstdsRSType {
+  RS_TYPE_UNKNOWN = 0;
+  RS_TYPE_LEFT = 1;
+  RS_TYPE_RIGHT = 2;
+  RS_TYPE_FORWARD = 3;
+  RS_TYPE_LEFTFORWARD = 4;
+  RS_TYPE_LEFTRIGHT = 5;
+  RS_TYPE_RIGHTFORWARD = 6;
+  RS_TYPE_LEFTRIGHTFORWARD = 7;
+  RS_TYPE_UTURN = 8;
+  RS_TYPE_LEFTTURN_UTURN = 9;
+  RS_TYPE_SPEEDLIMIT_10KPH = 10;
+  RS_TYPE_SPEEDLIMIT_20KPH = 11;
+  RS_TYPE_SPEEDLIMIT_30KPH = 12;
+  RS_TYPE_SPEEDLIMIT_40KPH = 13;
+  RS_TYPE_SPEEDLIMIT_50KPH = 15;
+  RS_TYPE_SPEEDLIMIT_60KPH = 16;
+  RS_TYPE_SPEEDLIMIT_70KPH = 17;
+  RS_TYPE_SPEEDLIMIT_80KPH = 18;
+  RS_TYPE_SPEEDLIMIT_90KPH = 19;
+  RS_TYPE_SPEEDLIMIT_100KPH = 20;
+  RS_TYPE_SPEEDLIMIT_110KPH = 21;
+  RS_TYPE_SPEEDLIMIT_120KPH = 22;
+  RS_TYPE_SPEEDLIMIT_130KPH = 23;
+  RS_TYPE_SPEEDLIMIT_140KPH = 24;
+  RS_TYPE_SPEEDLIMIT_150KPH = 25;
+};
+
+enum BstdsRSColor {
+  RS_COLOR_WHITE = 0;
+  RS_COLOR_YELLOW = 1;
+  RS_COLOR_BLUE = 2;
+  RS_COLOR_ORANGE = 3;
+};
+
+message BstdsRoadSignHeader {
+  optional int32 protocol_version = 1;
+  //Exposure time of midpoint of the image, unit: second (图像曝光中间点的时间戳)
+  optional double time_stamp = 2;
+  optional double isp_time_stamp = 3;
+  // Number of roadmarks detected
+  optional int32 number_road_signs = 4;
+  optional int64 check_sum = 5;
+};
+
+message BstdsRoadSignObj {
+  //The id number of the road sign (道路标志的ID)
+  optional int32 id = 1;
+  //Confidence of detected road sign (道路标志识别的置信度)
+  optional float confidence = 2;
+  //Road sign lane relevancy (道路标志在哪条车道线上)
+  optional BstdsRSLane lane = 3;
+  optional BstdsRSColor color = 4;  
+  //The lateral position of a road sign, unit:meter (距离标志的横向距离) 
+  optional float lat_pos = 5;
+  //The longitudinal position of a road sign, unit:meter (距离标志的纵向距离)
+  optional float long_pos = 6;
+  //Vertical position of the point (ACLC coordinates) (多边形参考点到自车的垂向距离)
+  optional float vert_pos = 7;
+  optional BstdsRSType type = 8;
+  optional float xmin = 9;
+  optional float xmax = 10;
+  optional float ymin = 11;
+  optional float ymax = 12;
+  optional float center_x = 13;
+  optional float center_y = 14;
+};
+
+message BstdsRoadSignInfo {
+  optional BstdsRoadSignHeader header = 1;  
+  repeated BstdsRoadSignObj road_signs = 2;
+};
+    
+  

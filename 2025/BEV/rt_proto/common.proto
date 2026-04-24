@@ -1,0 +1,30 @@
+syntax = "proto2";
+package autoplt.canfd;
+
+enum BstdsBoolean {
+  FALSE = 0;
+  TRUE = 1;
+};
+
+//Lane assignment of object（目标所在车道）
+enum BstdsObjLaneAssignment {
+  UNKNOWN_LANE = 0;
+  EGO_LANE = 1;
+  LEFT_LANE = 2;
+  RIGHT_LANE = 3;
+  SECLEFT_LANE = 4;
+  SECRIGHT_LANE = 5;
+};
+enum BstdsObjBevLaneAssignment {
+  BEV_UNKNOWN = 0;
+  BEV_UNCARED_LEFT = 1;
+  BEV_LL_LINE = 2;
+  BEV_LEFT = 3;
+  BEV_LEFT_LINE = 4;
+  BEV_EGO_LANE = 5;
+  BEV_RIGHT_LINE = 6;
+  BEV_RIGHT = 7;
+  BEV_RR_LINE = 8;
+  BEV_UNCARED_RIGHT = 9;
+  BEV_MAX_OBJECT_LANE_ASSIGNMENT=10;
+};

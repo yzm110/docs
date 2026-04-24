@@ -1,0 +1,69 @@
+syntax = "proto2";
+import "common.proto";
+package autoplt.canfd;
+
+enum BstdsCameraID {
+    BSCAM_FRONT = 0;      /**< Front */
+    BSCAM_FR = 1;         /**< Left front */
+    BSCAM_FL = 2;         /**< Left rear */
+    BSCAM_REAR = 3;       /**< Right front */
+    BSCAM_RL = 4;         /**< Right rear */
+    BSCAM_RR = 5;         /**< Rear */
+};
+enum BstdsStaticCalibState {
+    STCALIB_NOTDONE = 0;
+    STCALIB_ONGOING = 1;
+    STCALIB_FAILED = 2;
+    STCALIB_DONE = 3;
+};
+ 
+enum BstdsDynamicCalibState {
+    DYNCALIB_NOTDONE = 0;
+    DYNCALIB_PENDING = 1;
+    DYNCALIB_ONGOING = 2;
+    DYNCALIB_FAILED = 3;
+    DYNCALIB_DONE = 4;
+};
+
+enum BstdsCameraFault {
+    NOFAULT = 0;
+    CAMERA_INPUT_FAULT = 1;
+    ISP_PROCESS_FAULT = 2;
+    CAMERA_OVERHEAT = 3;
+    FAULT4 = 4;
+    FAULT5 = 5;
+    FAULT6 = 6;
+    FAULT7 = 7;
+    FAULT8 = 8;
+    FAULT9 = 9;
+    FAULT10 = 10;
+    FAULT11 = 11;
+    FAULT12 = 12;
+    FAULT13 = 13;
+    FAULT14 = 14;
+    FAULT15 = 15;
+};
+
+message BstdsCameraState {
+    optional int32 protocol_version = 1;
+    optional double timestamp = 2;
+    optional double isp_timestamp = 3;
+    optional double cyber_sent_timestamp = 4;
+    optional BstdsStaticCalibState static_calibration = 5;
+    optional BstdsDynamicCalibState dynamic_calibration = 6;
+    optional BstdsCameraFault fault = 7;
+    optional BstdsBoolean low_illuminance = 8;
+    optional double utc_time_stamp = 9;
+    optional int32 app_version_major = 10;
+    optional int32 app_version_minor = 11;
+    optional int32 app_version_patch = 12;
+    optional BstdsCameraID src_cam = 13;
+};
+
+message BstdsOnlineCalib {
+    optional float yaw = 1;
+    optional float roll = 2;
+    optional float pitch = 3;
+    optional float vp_x = 4; 
+    optional float vp_y = 5;
+};

@@ -1,0 +1,90 @@
+syntax = "proto2";
+import "common.proto";
+package autoplt.canfd;
+
+message BstdsStaticObstacleHeader {
+    optional int32 protocol_version = 1;
+    //Exposure time of midpoint of the image, unit: second (图像曝光中间点的时间戳)
+    optional double time_stamp = 2; 
+    //Number of objects detected (检测出的目标数)
+    optional int32 static_object_number = 4;
+    optional int64 check_sum = 5;
+    optional int32 cntr = 6;
+    optional double isp_time_stamp = 7;
+};
+
+//Classification of the Point (静态目标的分类)
+enum BstdsStaticObjType {
+  STATICOBJ_UNKNOWN = 0;
+  STATICOBJ_POLES = 1;
+  STATICOBJ_CONE = 2;
+  STATICOBJ_TRIANGLEWARNING = 3;
+  STATICOBJ_HARDSHOULDER = 4;
+  STATICOBJ_UNDERRIVABLE = 5;
+};
+
+//Tracking Status for the Point（识别多边形的追踪状态）
+enum BstdsStaticObjTrackingStatus {
+  STATICOBJTRK_INVALID = 0;
+  STATICOBJTRK_NOTTRACKED = 1;
+  STATICOBJTRK_NEW = 2;
+  STATICOBJTRK_TRACKED = 3;
+  STATICOBJTRK_PREDICTED = 4;
+};
+
+message BstdsStaticObject {
+    //Id（静态目标的Id）
+    optional int32 id = 1;
+    optional BstdsStaticObjType type = 2;
+    // The estimated probability that the detection is correct (静态目标识别置信度) 
+    optional float detection_confidence = 3;
+    //For each bit: 0: 未被识别到； 1: 识别到. Bit0: 过去第一帧, Bit1: 过去第二帧 ... Bit7: 过去第八帧.
+    optional int32 detection_history = 4;
+    //Width of the 2D bonding box of static object (静态目标的宽度)
+    optional float width = 5;
+    //Height of the stixel corresponding to the point (静态目标点的高度)
+    optional float height = 6;
+    //Lateral position of the point (ACLC coordinates) (静态目标点的横向距离 (摄像头坐标系))
+    optional float lat_pos = 7;
+    //Standard Deviation of the lateral position (横向距离标准差)
+    optional float std_dev_lat_pos = 8;
+    //Longitudinal position of the point (ACLC coordinates) (静态目标点的纵向距离 (摄像头坐标系))
+    optional float long_pos = 9;
+    //Standard Deviation of the longitudinal position (纵向距离标准差)
+    optional float std_dev_long_pos = 10;
+    optional float vert_pos = 11;
+    optional BstdsStaticObjTrackingStatus track_status = 12;
+    //confidence signal for FUSA (功能安全是否验证的flag)
+    optional BstdsBoolean is_verfied = 13;
+  };
+
+  message BstdsStaticObjectInfo {
+    optional BstdsStaticObstacleHeader header = 1;
+    repeated BstdsStaticObject static_obj = 2;
+  };
+    
+  message BstdsStopLineInfo {
+    optional int32 protocol_version = 1;
+    //Exposure time of midpoint of the image, unit: second (图像曝光中间点的时间戳)
+    optional double time_stamp = 2;
+    //Confidence of the stop line information（停止线识别的置信度）
+    optional float confidence = 3;
+    //Longitudinal distance in meters to the closest point of detected crosswalk (距离人行道的纵向距离)
+    optional float distance = 4; 
+    optional double isp_time_stamp = 5;
+  };
+  
+message BstdsCrosswalkInfo {
+    optional int32 protocol_version = 1;
+    //Exposure time of midpoint of the image, unit: second (图像曝光中间点的时间戳)
+    optional double time_stamp = 2;
+    //Confidence of the stop line information（停止线识别的置信度）
+    optional float confidence = 3;
+    //Longitudinal distance in meters to the closest point of detected crosswalk (距离人行道的纵向距离)
+    optional float distance = 4;
+    //Length of the crosswalk, unit:meter (人行道的长度)
+    optional float length = 5;
+    //Width of the crosswalk, unit:meter (人行道的宽度)
+    optional float width = 6;
+    optional double isp_time_stamp = 7;
+  };

@@ -1,0 +1,52 @@
+syntax = "proto2";
+
+import "camerastate_msg.proto";
+import "extended_msg.proto";
+import "freespace_msg.proto";
+import "lane_msg.proto";
+import "lsr_msg.proto";
+import "obj_msg.proto";
+import "roadsign_msg.proto";
+import "static_msg.proto";
+import "traffic_sign_msg.proto";
+import "traffic_light_msg.proto";
+
+import "camera_res_msg.proto";
+
+package autoplt.canfd;
+
+message BstdsFrvMsg {
+    optional BstdsCameraState cam_state = 1;
+    optional BstdsOnlineCalib online_calib = 2;
+    optional BstdsFrvObjectInfo obj_info = 3;
+    optional BstdsFrvObjUnfilInfo obj_unf_info = 4;
+    optional BstdsFrvLaneInfo lane_info = 5;
+    optional BstdsFreespaceInfo fs_info = 6;
+    optional BstdsExtendedInfo ext_info = 7;
+    optional BstdsLsrInfo lsr_info = 8;
+    optional BstdsRoadSignInfo rs_info = 9;
+    optional BstdsTrfcSignInfo trfc_sign_info = 10;
+    optional BstdsTrfcLightInfo trfc_li_info = 11;
+    optional BstdsStaticObjectInfo static_obj_info = 12;
+    optional BstdsStopLineInfo stopline_info = 13;
+    optional BstdsCrosswalkInfo crosswalk_info = 14;
+    optional BstdsCameraFrvMsg camera_msg = 15;
+  };
+
+  message BstdsSivMsg {  
+    optional BstdsCameraState cam_state = 1;
+    optional BstdsSivObjectInfo obj_info = 2;
+    optional BstdsSivObjUnfilInfo obj_unf_info = 3;
+    optional BstdsSivLaneInfo lane_info = 4;
+    optional BstdsFreespaceInfo fs_info = 5;
+    optional BstdsCameraSivMsg camera_msg = 6;
+  };
+
+  message BstdsRrvMsg {
+    optional BstdsCameraState cam_state = 1;
+    optional BstdsRrvObjectInfo rrv_obj_info = 2;
+    optional BstdsRrvLaneInfo lane_info = 3;
+    optional BstdsCameraRrvMsg camera_msg = 4;
+  };
+    
+  

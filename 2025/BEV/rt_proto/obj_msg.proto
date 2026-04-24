@@ -1,0 +1,376 @@
+syntax = "proto2";
+import "common.proto";
+package autoplt.canfd;
+message BstdsBevStopLineHeader{
+  optional double timestamp = 1;
+  optional int32 num_of_sl = 2;
+
+}
+
+message BstdsBevArrowHeader{
+  optional double timestamp = 1;
+  optional int32 num_of_aw = 2;
+
+}
+
+message BstdsBevCrosswalkHeader{
+  optional double timestamp = 1;
+  optional int32 num_of_cw = 2;
+
+}
+message BstdsObjHeader {
+  optional int32 protocol_version = 1;
+  //Exposure time of midpoint of the image, unit: second (图像曝光中间点的时间戳)
+  optional double time_stamp = 2;
+  //Image frame counter with E2E protection. The frame counter is verified to ASIL B
+  optional int32 img_frame_ctr = 3;
+  //Number of objects detected (检测出的目标数)
+  optional int32 object_number = 4; 
+  //Extended:
+  //True if there is CIPV
+  optional BstdsBoolean has_cipv = 5;
+  //True if there is cut in from left
+  optional BstdsBoolean left_close_range_cut_in = 6;
+  //True if there is cut in from right 
+  optional BstdsBoolean right_close_range_cut_in = 7;
+  optional BstdsBoolean is_fail_scene = 8;
+  optional int64 check_sum = 9;
+  optional int32 cntr = 10;
+  optional double isp_time_stamp = 11;
+};
+
+//Object type（目标类型）
+enum BstdsObjType {
+  OBJECT_UNKNOWN = 0;
+  CAR = 1;
+  TRUCK = 2;
+  BUS = 3;
+  MOTOCYCLIST = 4;
+  BICYCLIST = 5;
+  TRICYCLE = 6;
+  PEDESTRIAN = 7;
+  MOTORCYCLE = 8;
+  BICYCLE = 9;
+  TRICYCLIST = 10;
+  TRI = 11;
+  CONE = 12;
+  WATERHOUSE = 13;
+  RESERVED = 14;
+};
+enum BstdsObjRefinedType {
+  REFINED_BUS = 0;
+  REFINED_CAR = 1;
+  REFINED_SPECIAL = 2;
+  REFINED_SUV = 3;
+  REFINED_TRUCK = 4;
+  REFINED_VAN = 5;
+  REFINED_PEDESTRIAN = 6;
+  REFINED_BYCYCLE = 7;
+  REFINED_CYCLIST = 8;
+  REFINED_MOTORCYCLE = 9;
+  REFINED_TRICYCLE = 10;
+  REFINED_UNKNOWN = 11;
+};
+  
+//FUSA requirement,Confidence of object data for functions（FUSA相关的置信度）
+enum BstdsObjCmsConfidence {
+  NOT_RELIABLE = 0;
+  RELIABLE_LEVEL1 = 1;
+  RELIABLE_LEVEL2 = 2;
+  RELIABLE_LEVEL3 = 3;
+};
+  
+//Tracking status（当前目标是否被追踪）
+enum BstdsObjTrackingStatus {
+  OBJTRK_INVALID = 0;
+  OBJTRK_UPDATED = 1;
+  OBJTRK_NEW = 2;
+  OBJTRK_PREDICTED = 3;
+};
+
+//Object turn indicator status（目标转向灯状态)
+enum BstdsObjTurnIndicator {
+  OFF = 0;
+  LEFT_ON = 1;
+  RIGHT_ON = 2;
+  BOTH_ON = 3;
+};
+
+//Which object side that is nearest (facing) the host vehicle（靠近自车的最近面）
+enum BstdsObjBrakeLight {
+  BRAKE_LIGHT_UNAVAILABLE = 0;
+  BRAKE_LIGHT_ON = 1;
+  BRAKE_LIGHT_OFF = 2;
+};
+
+//Current motion pattern（目标当前运动状态）
+enum BstdsObjPoseState {
+  STATE_UNKNOWN = 0;
+  STATAIONARY = 1;
+  PROCEEDING_AWAY = 2;
+  PROCEEDING_STATIONARY = 3;
+  PROCEEDING_CLOSER = 4;
+  ONCOMING = 5;
+  CROSSING_FROM_LEFT = 6;
+  CROSSING_FROM_RIGHT = 7;
+  REARSIDEMOVING = 8;
+};  
+
+//Which object side that is nearest (facing) the host vehicle（靠近自车的最近面）
+enum BstdsObjNearestSide {
+  UNKNOWN_SIDE = 0;
+  REAR_SIDE = 1;
+  FRONT_SIDE = 2;
+  RIGHT_SIDE = 3;
+  LEFT_SIDE = 4;
+};
+  
+//Whether the object cuts into the lane(目标是否切入自车车道)
+enum BstdsCutIn {
+  CUTIN_NO = 0;
+  CUTIN_YES = 1;
+};
+  
+message BstdsPlatesObject {
+  optional BstdsBoolean valid = 1;
+  //Confidence score (置信度低)
+  optional float score = 2; 
+  optional float x_min = 3;
+  optional float y_min = 4;
+  optional float x_max = 5;
+  optional float y_max = 6;
+};
+
+message BstdsBevArrowobjects {
+  // multi-label classification 0: left, 1: forward, 2: right, 3: u-turn, 4: left_merge, 5: right_merge, 6: forbidden
+  //std::array<bool, 7> cls;
+  repeated float vertices = 1;
+  repeated bool cls = 2;
+  optional int32 id = 3;
+  // std::array<std::array<float, 3>, 4> vertices;
+  // 0 for same direction as egocar, 1 for opposite direction
+  repeated float direction = 4;
+  repeated float center = 5;
+  optional float width = 6;
+  optional float score = 7;
+  optional int32 if_predict = 8;             
+  optional int32 age = 9;  // number of frames the arrow being reported
+  optional int32 lane_id = 10;
+
+}
+message BstdsBevCrosswalkobjects{
+  // four endpoints(x,y,z) of crosswalk
+  optional int32 id = 1;
+  optional float score = 2;
+  optional int32 if_predict = 3;  // describe if the crosswalk is predicted or detected
+  // 0:detected 1:predicted
+  optional int32 age = 4; 
+  repeated float vertices = 5; //12 
+}
+message BstdsBevStopLineobjects{
+  optional int32 id = 1;
+  // two endpoints(x,y,z) of stopline
+  optional float score = 2;
+  optional int32 if_predict = 3;  // describe if the stopline is predicted or detected
+                       // 0:detected 1:predicted
+  optional int32 age = 4;  // number of frames the stopline 
+  optional float endpoints_x0 = 5;
+  optional float endpoints_y0 = 6;
+  optional float endpoints_z0 = 7;
+  optional float endpoints_x1 = 8;
+  optional float endpoints_y1 = 9;
+  optional float endpoints_z1 = 10;
+}
+message BstdsObjObject {
+  //用于表征目标追踪；1000ms 内同一个 Id 不能被复用
+  optional int32 id = 1;
+  //
+  optional int32 valid = 2;
+  optional BstdsObjType type = 3;
+  //For each bit: 0: 未被识别到； 1: 识别到. Bit0: 过去第一帧, Bit1: 过去第二帧 ... Bit7: 过去第八帧.
+  optional int32 detection_history = 4;
+  optional BstdsObjCmsConfidence cms_confidence = 5;
+  //The age of object, unit: second (目标物的寿命)
+  optional int32 age = 6;
+  //Angle to object from host longitudinal axis, unit:rad (到前车参考点位置到角度)
+  optional float angle = 7;
+  //Angle standard deviation (角度标准差)
+  optional float angle_std_dev = 8;
+  //The heading angle for a vehicle, unit:rad (前车朝向和自车朝向的夹角)
+  optional float heading_angle = 9;
+  //Standard deviation for the heading angle of the object (heading angle的标准差)
+  optional float heading_angle_std_dev = 10;
+  //The object length, unit:meter (目标长度)
+  optional float length = 11;
+  //Length standard deviation (目标长度标准差)
+  optional float length_std_dev = 12;
+  //The object width. The width is the extent of the nearest facing side, unit:meter (目标最近面的宽度)
+  optional float width = 13;
+  //Standard deviation width of object (宽度标准差)
+  optional float width_std_dev = 14;
+  //The object height, unit:meter (目标高度)
+  optional float height = 15;
+  //The object height standard deviation (高度标准差)
+  optional float height_std_dev = 16;
+  //The longitudinal distance to the targets reference point, unit:meter. (目标相对自车的纵向距离）
+  optional float lgt_pos = 17;
+  //Standard deviation for the longitudinal position of the object (纵向距离标准差)
+  optional float lgt_pos_std_dev = 18;
+  //The longitudinal velocity of the object in the reference coordinate system, unit:m/s (目标相对自车的纵向速度)
+  optional float lgt_vel = 19;
+  //Standard deviation  longitudinal velocity (纵向速度标准差)
+  optional float lgt_vel_std_dev = 20;
+  //The longitudinal acceleration of the object in the reference coordinate system, unit:m/s2 (目标的纵向相对加速度)
+  optional float lgt_acc = 21;
+  //Longitudbinal aceleration standard deviation (纵向相对加速度的标准差)
+  optional float lgt_acc_std_dev = 22;
+  //The lateral distance to the targets reference point, unit:meter. (目标相对自车的横向距离)
+  optional float lat_pos = 23;
+  //Standard deviation for thelateral position of the object. (横向距离标准差)
+  optional float lat_pos_std_dev = 24;
+  //The lateral velocity of the object in the reference coordinate system, unit:m/s (目标的横向相对速度)
+  optional float lat_vel = 25;
+  //Lateral velocity standard deviation (横向速度标准差)
+  optional float lat_vel_std_dev = 26;
+  //The lateral acceleration of the object in the reference coordinate system, unit:m/s2 (目标的横向相对加速度)
+  optional float lat_acc = 27;
+  optional float lat_acc_std_dev = 28;
+  //Probability of correct classification (表征目标分类的可信程度)
+  optional float class_score = 29;
+  optional BstdsObjTrackingStatus tracking_sts = 30;
+  optional BstdsObjTurnIndicator turn_indicator = 31;
+  optional BstdsObjBrakeLight brake_light = 32;
+  optional BstdsObjPoseState pose_status = 33;
+  optional BstdsObjNearestSide neare_stside = 34;
+  optional BstdsObjLaneAssignment lane_assignment = 35;
+  optional BstdsCutIn cut_in = 36;
+  //The maximum length that the object body exceeds the lane line, unit:meter (目标超过自车车道的最大长度)
+  optional float cut_in_length = 37;
+  //The position of the corner, unit: meter (目标车辆识别框切入的角点的纵向位置)
+  optional float cut_in_ang_pos = 38;
+  //0: NA，otherwise valid
+  optional BstdsBoolean lane_offset_left_valid = 39;
+  //Lane offset to left, unit:meter (目标到所在车道左侧车道线的横向距离)
+  optional float lane_offset_left = 40;
+  //Quality of Lane offset to left (Lane offset left标准差)
+  optional float lane_offset_left_std_dev = 41;
+  //0: NA，otherwise valid
+  optional BstdsBoolean lane_offset_right_valid = 42;
+  //Lane offset to right, unit:meter (目标到所在车道右侧车道线的横向距离)
+  optional float lane_offset_right = 43;
+  //Quality of Lane offset to right (Lane offset right标准差)
+  optional float lane_offset_right_std_dev = 44;
+  //Extended:
+  optional BstdsPlatesObject plate = 45;
+  //True if the object is being towed
+  optional BstdsBoolean towed = 46;
+  //True if the object is CIPV
+  optional int32 is_cipv = 47;
+  //True if the object is second CIPV
+  optional int32 is_sec_cipv = 48;
+  //True if the object is LMC(Left Most Critical)
+  optional BstdsBoolean is_lmc = 49;
+  //True if the object is RMC(Right Most Critical)
+  optional BstdsBoolean is_rmc = 50;
+  //True if the object is MCP(Most Critical Pedestrian)
+  optional BstdsBoolean is_mcp = 51;
+  //Object existance confidence
+  optional float exist_confidence = 52;
+  optional float center_x = 53;
+  optional float center_x_std_dev = 54;
+  optional float center_y = 55;
+  optional float center_y_std_dev = 56;
+  optional BstdsBoolean width_trunc = 57;
+  optional BstdsBoolean height_trunc = 58;
+  optional BstdsBoolean occ_flag = 59;
+  optional int32 occ_level = 60;
+  optional int32 truncated_level = 61;
+  optional BstdsBoolean front_wpt_valid = 62;
+  optional float front_wpt_x = 63;
+  optional float front_wpt_y = 64;
+  optional BstdsBoolean rear_wpt_valid = 65;
+  optional float rear_wpt_x = 66;
+  optional float rear_wpt_y = 67;
+  optional int32 obstacle_supplier_f = 68;
+  optional int32 brake_lights = 69;
+  optional int32 blinker_info = 70;
+
+
+};
+  
+message BstdsObjUnfiltered {
+  //Confidence of the detection (通用未过滤目标探测的置信度)
+  optional float confidence = 1;
+  //If the detection is valid/populated this flag will be true (表明当前探测是否有)
+  optional BstdsBoolean valid = 2;
+  //用于表征目标追踪；1000ms 内同一个 Id 不能被复用 
+  optional int32 id = 3;
+  //Number of points（图像坐标系的点的个数)
+  optional int32 number_of_points = 4;
+  //U position of Object Point 1 in image coordinates(图像坐标系下目标框的左上角的U坐标)
+  optional int32 point_1_u_pos = 5;
+  //V position of Object Point 1 in image coordinates(图像坐标系下目标框的左上角的V坐标)
+  optional int32 point_1_v_pos = 6;
+  //U position of Object Point 2 in image coordinates(图像坐标系下目标框的右下角的U坐标)
+  optional int32 point_2_u_pos = 7;
+  //V position of Object Point 2 in image coordinates(图像坐标系下目标框的右下角的V坐标)
+  optional int32 point_2_v_pos = 8;
+  //X position of Point 1 in world coordinates(世界坐标系下最近面的左上角的X坐标)
+  optional int32 point_3d_1_x_pos = 9;
+  //Y position of Point 1 in world coordinates(世界坐标系下最近面的左上角的Y坐标)
+  optional int32 point_3d_1_y_pos = 10;
+  //Z position of Point 1 in world coordinates(世界坐标系下最近面的左上角的Z坐标)
+  optional int32 point_3d_1_z_pos = 11;
+  //The longitudinal distance in world coordinates.（目标在世界坐标系的纵向距离）
+  optional float lgt_pos = 12;
+  //The lateral distance in world coordinates.（目标在世界坐标系的横向距离）
+  optional float lat_pos = 13;
+  //The object height.（未过滤目标高度）
+  optional float height = 14;
+  //The object width. The width is the extent of the nearest facing side.（未过滤目标最近面的宽度）
+  optional float width = 15;
+  //The object Length. （未过滤目标的长度）
+  optional float length = 16;
+  //Type of unfiltered objects (未过滤目标类型)
+  optional BstdsObjType Class = 17;
+  //Probability of correct classification (表征目标分类的可信程度)
+  optional float class_score = 18;
+  };
+  
+  message BstdsFrvObjectInfo {
+    optional BstdsObjHeader header = 1;
+    repeated BstdsObjObject objects = 2; 
+  };
+
+  message BstdsBevArrowInfo {
+    optional BstdsBevArrowHeader header = 1;
+    repeated BstdsBevArrowobjects objects = 2; 
+
+  }
+  message BstdsBevCrosswalkInfo {
+    optional BstdsBevCrosswalkHeader header = 1;
+    repeated BstdsBevCrosswalkobjects objects = 2; 
+  };
+  message BstdsBevStopLineInfo {
+    optional BstdsBevStopLineHeader header = 1;
+    repeated BstdsBevStopLineobjects objects = 2; 
+  };
+  message BstdsFrvObjUnfilInfo {
+    optional BstdsObjHeader header = 1;
+    repeated BstdsObjUnfiltered obj_unfil = 2; 
+  };
+
+  message BstdsSivObjectInfo {
+    optional BstdsObjHeader header = 1;
+    repeated BstdsObjObject objects = 2; 
+  };
+
+  message BstdsSivObjUnfilInfo {
+    optional BstdsObjHeader header = 1;
+    repeated BstdsObjUnfiltered obj_unfil = 2; 
+  };
+
+  message BstdsRrvObjectInfo {
+    optional BstdsObjHeader header = 1;
+    repeated BstdsObjObject objects = 2; 
+  };
